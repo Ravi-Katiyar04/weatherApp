@@ -1,28 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 *{
     margin: 0;
     padding: 0;
 }
 .container {
     width: 100%;
+    display: flex;
     height: 100vh;
+    font-family: Popins, sans-serif;
     background-color: #f0f0f0;
 }
 
 .weather-input {
-    height:100%;
-    width: 80%;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5rem;
+    height:91%;
+    width: 25%;
     max-width: 400px;
-    border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #0980e1;
 }
-
-.weather-output {
-    width: 80%;
-    max-width: 600px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.input-group{
+    width: 100%;
+    position: relative;
+    padding: 6px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+#userLocation{
+    width: 80%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+#converter{
+    position: absolute;
+    right: 40px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+.fa-search{
+    position: absolute;
+    right: 8px;
+}
+.city-weather{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+.weather-output {
+    padding: 40px;
+    width: 70%;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+}
+.temp{
+    font-size: 4rem;
+    font-weight: 600;
+    text-align: center;
+}
+.line{
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
+    margin: 16px 0;
+}
+.today{
+    width: 100%;
+}
+.today-desc{
+    display: grid;
+    margin-top: 16px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+ 
 }
 
+.desc-item{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 19px;
+    background-color: #309cf5;
+}
+
+.this-week{
+    margin-top: 20px;
+}
+
+.week-desc{
+    display: grid;
+    margin-top: 16px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+ 
+}
+
+.sunrise-sunset{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sunrise-sunset div{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}

@@ -11,17 +11,90 @@
 <body>
     <div class="container">
         <div class="weather-input">
-            <div class="city">
+            <div class="input-group">
                 <input type="text" name="city" id="userLocation" placeholder="Search for city...">
                 <select name="converter" id="converter">
                     <option >&deg;C</option>
-                    <option>&deg;</option>
+                    <option>&deg;F</option>
                 </select>
-                <i class="fa fa-search"></i>      
+                <i onclick="findUserLocation()" class="fa fa-search"></i>
+                <!-- <i onclick="findUserLocation" class="fa fa-search"></i>       -->
+            </div>
+            <i class="cloudIcon"></i>          
+            <div class="city-weather">
+                <div class="temp"></div>
+                <div class="feels-like"></div>
+                <div class="cloud"></div>
+                <div class="line"></div>
+                <div class="date-time"></div>
+                <div class="location"></div>
             </div>
         </div>
-        <div class="output">
+        <div class="weather-output">
+            <div class="today">
+                <h2>Today's weather</h2>
+                <div class="today-desc">
+                    <div class="humidity desc-item">
+                        Humidity
+                        <i class="fa fa-water fa-2x"></i>
+                        <h2 id="vlaue">34</h2>
+                    </div>
+                    <div class="wind-speed desc-item">
+                        wind-speed
+                        <i class="fa fa-wind fa-2x"></i>
+                        <h2 id="vlaue">34</h2>
+                    </div>
+                    <div class="sunrise-sunset desc-item">
+                        <div>
+                            <i class="fa fa-sun fa-2x"></i>
+                            <h2 id="vlaue">34</h2>
+                        </div>
+                        <div>
+                            <i class="fa-regular fa-sun fa-2x"></i>
+                            <h2 id="vlaue">34</h2>
+                        </div>
+                    </div>
+                    <div class="cloud desc-item">
+                        clouds
+                        <i class="fa fa-cloud fa-2x"></i>
+                        <h2 id="vlaue">34</h2>
+                    </div>
+                    <div class="uv desc-item">
+                        UV index
+                        <i class="fa-solid fa-bacon fa-2x"></i>
 
+                        <h2 id="vlaue">34</h2>
+                    </div>
+                    <div class="pressure desc-item">
+                        pressure
+                        <i class="fa-solid fa-gauge fa-2x"></i>
+                        <h2 id="vlaue">34</h2>
+                    </div>
+
+                </div>
+            </div>
+            <div class="this-week">
+                <div class="week">
+                    <h2>This Week</h2>
+                    <div class="week-desc">
+                        <div class="humidity desc-item">
+                            Humidity
+                            <i class="fa fa-water fa-2x"></i>
+                            <h2 id="vlaue">34</h2>
+                        </div>
+                        <div class="humidity desc-item">
+                            Humidity
+                            <i class="fa fa-water fa-2x"></i>
+                            <h2 id="vlaue">34</h2>
+                        </div>
+                        <div class="humidity desc-item">
+                            Humidity
+                            <i class="fa fa-water fa-2x"></i>
+                            <h2 id="vlaue">34</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
