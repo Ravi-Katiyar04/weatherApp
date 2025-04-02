@@ -204,8 +204,8 @@ let locationName = document.querySelector(".location");
 // Selecting today's weather details
 let humidity = document.querySelector(".humidity h2");
 let windSpeed = document.querySelector(".wind-speed h2");
-let sunrise = document.querySelector(".sunrise-sunset div:first-child h2");
-let sunset = document.querySelector(".sunrise-sunset div:last-child h2");
+let visibility = document.querySelector(".visibility h2");
+let clouds = document.querySelector(".clouds h2");
 let uvIndex = document.querySelector(".uv h2");
 let pressure = document.querySelector(".pressure h2");
 
@@ -256,6 +256,8 @@ function updateWeatherUI(data) {
     humidity.innerHTML = `${data.current.humidity} %`;
     windSpeed.innerHTML = `${data.current.wind_kph} km/h`;
     pressure.innerHTML = `${data.current.pressure_mb} mb`;
+    visibility.innerHTML = `${data.current.vis_km} km`;
+    clouds.innerHTML = `${data.current.cloud} %`;
     uvIndex.innerHTML = data.current.uv;
     cloudIcon.innerHTML = `<i class="fa ${getWeatherIcon(data.current.condition.code)} fa-5x"></i>`;
     locationName.innerHTML = data.location.name + ", " + data.location.country;
