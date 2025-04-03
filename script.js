@@ -1,5 +1,4 @@
 
-
 // Selecting elements from the DOM
 const userLocation = document.getElementById("userLocation");
 const converter = document.getElementById("converter");
@@ -62,7 +61,7 @@ async function getWeather() {
 function updateWeatherUI(data) {
 
     temp.innerHTML = `${data.current.temp_c}°C`;
-    feelsLike.innerHTML = `Fells like ${data.current.feelslike_c}°C`;
+    feelsLike.innerHTML = `Feels like ${data.current.feelslike_c}°C`;
     cloud.innerHTML = data.current.condition.text;
     humidity.innerHTML = `${data.current.humidity} %`;
     windSpeed.innerHTML = `${data.current.wind_kph} km/h`;
@@ -81,19 +80,16 @@ function updateWeatherUI(data) {
         day: "numeric",
         hour12: true
     }).format(new Date());
-    console.log(data.forecast.forecastday);
+   
     data.forecast.forecastday.forEach((day, index) => {
-        console.log(day.date, index);
         let div = document.createElement("div");
         div.className = "desc-item";
         div.innerHTML += `    
-        <div class="humidity desc-item">
             <h2>${day.date}</h2>
             <i class="fa ${getWeatherIcon(day.day.condition.code)} fa-2x"></i>
             <h2>${day.day.condition.text}</h2>
-            <h2>${day.day.avgtemp_c}°C</h2>
-            
-        </div>`;
+            <h2>${day.day.avgtemp_c}°C</h2>           
+        `;
         document.querySelector(".forecast").append(div);
     });
 
@@ -117,11 +113,29 @@ function getWeatherIcon(conditionCode) {
 // Convert temperature between Celsius and Fahrenheit
 converter.addEventListener("change", () => {
     if (temp.textContent.includes("°C")) {
-        const celsius = parseFloat(temp.textContent);
-        temp.textContent = `${(celsius * 9 / 5 + 32).toFixed(1)}°F`;
+        const celsiustemp = parseFloat(temp.textContent);
+        temp.textContent = `${(celsiustemp * 9 / 5 + 32).toFixed(1)}°F`;
+
+        const celsiusfeelslike = parseFloat(feelsLike.textContent.split(" ")[2]);
+        feelsLike.innerHTML = `Feels like ${((celsiusfeelslike * 9 / 5 + 32).toFixed(1))}°F`;
+
+        const forecast = document.querySelector(".forecast").children;  
+        Array.from(forecast).forEach((day) => {
+            const fahrenheit = parseFloat(day.lastElementChild.textContent);   
+            day.lastElementChild.textContent = `${((fahrenheit * 9 / 5 + 32).toFixed(1))}°F`;
+        });
     } else {
-        const fahrenheit = parseFloat(temp.textContent);
-        temp.textContent = `${((fahrenheit - 32) * 5 / 9).toFixed(1)}°C`;
+        const fahrenheittemp = parseFloat(temp.textContent);
+        temp.textContent = `${((fahrenheittemp - 32) * 5 / 9).toFixed(1)}°C`;
+
+        const celsiusfeelslike = parseFloat(feelsLike.textContent.split(" ")[2]);
+        feelsLike.innerHTML = `Feels like ${((celsiusfeelslike - 32) * 5 / 9).toFixed(1)}°C`;
+
+        const forecast = document.querySelector(".forecast").children;  
+        Array.from(forecast).forEach((day) => {
+            const fahrenheit = parseFloat(day.lastElementChild.textContent);   
+            day.lastElementChild.textContent = `${((fahrenheit - 32) * 5 / 9).toFixed(1)}°C`;
+        });
     }
 });
 
