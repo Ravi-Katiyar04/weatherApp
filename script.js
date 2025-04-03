@@ -81,6 +81,7 @@ function updateWeatherUI(data) {
         hour12: true
     }).format(new Date());
    
+    document.querySelector(".forecast").innerHTML = ""; // Clear forecast before appending
     data.forecast.forecastday.forEach((day, index) => {
         let div = document.createElement("div");
         div.className = "desc-item";
