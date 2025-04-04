@@ -22,7 +22,7 @@ let uvIndex = document.querySelector(".uv h2");
 let pressure = document.querySelector(".pressure h2");
 
 
-const API_BASE_URL = `http://api.weatherapi.com/v1/forecast.json?key=7dcda9ca408d4b239c750906252603&days=3&aqi=no&alerts=no&q=`;
+const API_BASE_URL = `https://api.weatherapi.com/v1/forecast.json?key=7dcda9ca408d4b239c750906252603&days=3&aqi=no&alerts=no&q=`;
 
 // Fetch weather data for a specific location entered by the user
 async function getWeather() {
@@ -86,7 +86,7 @@ function updateWeatherUI(data) {
         let div = document.createElement("div");
         div.className = "desc-item";
         div.innerHTML += `    
-            <h2>${day.date}</h2>
+            <h2>${new Intl.DateTimeFormat("en-GB", {day: "numeric", month: "long", year: "numeric"}).format(new Date(day.date))}</h2>
             <i class="fa ${getWeatherIcon(day.day.condition.code)} fa-2x"></i>
             <h2>${day.day.condition.text}</h2>
             <h2>${day.day.avgtemp_c}°C</h2>           
