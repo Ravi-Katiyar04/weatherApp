@@ -21,6 +21,9 @@ let clouds = document.querySelector(".clouds h2");
 let uvIndex = document.querySelector(".uv h2");
 let pressure = document.querySelector(".pressure h2");
 
+// Global variables to track unit and store last weather data
+let currentUnit = "C";
+let lastData = null;
 
 const API_BASE_URL = `https://api.weatherapi.com/v1/forecast.json?key=7dcda9ca408d4b239c750906252603&days=3&aqi=no&alerts=no&q=`;
 
@@ -37,6 +40,7 @@ async function getWeather() {
                     const response = await fetch(`${API_BASE_URL}${lat},${lon}`);
                     if (!response.ok) throw new Error("Location not found");
                     const data = await response.json();
+                    lastData = data;
                     updateWeatherUI(data);
                 } catch (error) {
                     alert("Error fetching location weather: " + error.message);
@@ -51,15 +55,16 @@ async function getWeather() {
         const response = await fetch(API_BASE_URL + city);
         if (!response.ok) throw new Error("City not found");
         const data = await response.json();
+        lastData = data;
         updateWeatherUI(data);
     } catch (error) {
         alert("Error fetching weather data: " + error.message);
     }
 }
 
-// Update UI with weather data
+// Update UI with weather data (always in Celsius)
 function updateWeatherUI(data) {
-
+    // Use Celsius values from API
     temp.innerHTML = `${data.current.temp_c}°C`;
     feelsLike.innerHTML = `Feels like ${data.current.feelslike_c}°C`;
     cloud.innerHTML = data.current.condition.text;
@@ -80,20 +85,26 @@ function updateWeatherUI(data) {
         day: "numeric",
         hour12: true
     }).format(new Date());
-   
-    document.querySelector(".forecast").innerHTML = ""; // Clear forecast before appending
-    data.forecast.forecastday.forEach((day, index) => {
+
+    // Update forecast
+    const forecastContainer = document.querySelector(".forecast");
+    forecastContainer.innerHTML = ""; // Clear forecast before appending
+    data.forecast.forecastday.forEach((day) => {
         let div = document.createElement("div");
         div.className = "desc-item";
         div.innerHTML += `    
-            <h2>${new Intl.DateTimeFormat("en-GB", {day: "numeric", month: "long", year: "numeric"}).format(new Date(day.date))}</h2>
+            <h2>${new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date(day.date))}</h2>
             <i class="fa ${getWeatherIcon(day.day.condition.code)} fa-2x"></i>
             <h2>${day.day.condition.text}</h2>
             <h2>${day.day.avgtemp_c}°C</h2>           
         `;
-        document.querySelector(".forecast").append(div);
+        forecastContainer.append(div);
     });
 
+    // If current unit is Fahrenheit, convert the displayed values
+    if (currentUnit === "F") {
+        convertToFahrenheit();
+    }
 }
 
 // Helper function to get weather icons
@@ -101,7 +112,7 @@ function getWeatherIcon(conditionCode) {
     const iconMap = {
         1000: "fa-sun",         // Clear sky
         1003: "fa-cloud-sun",     // Partly cloudy
-        1006: "fa-cloud ",         // Cloudy
+        1006: "fa-cloud",         // Cloudy
         1009: "fa-smog",          // Overcast
         1030: "fa-smog",          // Mist
         1063: "fa-cloud-rain",    // Patchy rain
@@ -111,36 +122,43 @@ function getWeatherIcon(conditionCode) {
     return iconMap[conditionCode] || "fa-cloud";
 }
 
-// Convert temperature between Celsius and Fahrenheit
+// Convert UI temperatures from Celsius to Fahrenheit
+function convertToFahrenheit() {
+    // Convert main temperature
+    let tempC = parseFloat(temp.textContent);
+    temp.textContent = `${(tempC * 9 / 5 + 32).toFixed(1)}°F`;
+
+    // Convert "feels like"
+    let feelsC = parseFloat(feelsLike.textContent.match(/[\d.]+/)[0]);
+    feelsLike.textContent = `Feels like ${(feelsC * 9 / 5 + 32).toFixed(1)}°F`;
+
+    // Convert forecast temperatures
+    const forecastItems = document.querySelectorAll(".forecast .desc-item");
+    forecastItems.forEach((item) => {
+        const tempElem = item.querySelector("h2:last-child");
+        if (tempElem) {
+            let forecastC = parseFloat(tempElem.textContent);
+            tempElem.textContent = `${(forecastC * 9 / 5 + 32).toFixed(1)}°F`;
+        }
+    });
+}
+
+// Converter event listener toggles the unit and updates the UI accordingly
 converter.addEventListener("change", () => {
-    if (temp.textContent.includes("°C")) {
-        const celsiustemp = parseFloat(temp.textContent);
-        temp.textContent = `${(celsiustemp * 9 / 5 + 32).toFixed(1)}°F`;
-
-        const celsiusfeelslike = parseFloat(feelsLike.textContent.split(" ")[2]);
-        feelsLike.innerHTML = `Feels like ${((celsiusfeelslike * 9 / 5 + 32).toFixed(1))}°F`;
-
-        const forecast = document.querySelector(".forecast").children;  
-        Array.from(forecast).forEach((day) => {
-            const fahrenheit = parseFloat(day.lastElementChild.textContent);   
-            day.lastElementChild.textContent = `${((fahrenheit * 9 / 5 + 32).toFixed(1))}°F`;
-        });
+    if (currentUnit === "C") {
+        currentUnit = "F";
+        convertToFahrenheit();
     } else {
-        const fahrenheittemp = parseFloat(temp.textContent);
-        temp.textContent = `${((fahrenheittemp - 32) * 5 / 9).toFixed(1)}°C`;
-
-        const celsiusfeelslike = parseFloat(feelsLike.textContent.split(" ")[2]);
-        feelsLike.innerHTML = `Feels like ${((celsiusfeelslike - 32) * 5 / 9).toFixed(1)}°C`;
-
-        const forecast = document.querySelector(".forecast").children;  
-        Array.from(forecast).forEach((day) => {
-            const fahrenheit = parseFloat(day.lastElementChild.textContent);   
-            day.lastElementChild.textContent = `${((fahrenheit - 32) * 5 / 9).toFixed(1)}°C`;
-        });
+        currentUnit = "C";
+        // Reapply the latest data in Celsius
+        if (lastData) {
+            updateWeatherUI(lastData);
+        }
     }
 });
 
 getWeather(); // Fetch weather data for the default location (if any)
+
 searchIcon.addEventListener("click", () => {
     if (userLocation.value.trim()) {
         console.log(userLocation.value);
